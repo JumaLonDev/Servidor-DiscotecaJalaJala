@@ -1,2 +1,4 @@
 import { createApp } from './app.js'
-import { MenuModel } from ''
+import { ProductModel } from './models/local-file.system/product.js'
+
+createApp({ productModel: ProductModel })

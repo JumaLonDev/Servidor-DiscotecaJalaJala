@@ -1,13 +1,13 @@
 import express, { json } from 'express'
-import { createMenuRouter } from './routes/menu.js'
+import { createProductRouter } from './routes/product.js'
 
-export const createApp = ({ serverModel }) => {
+export const createApp = ({ productModel }) => {
   const app = express()
 
   app.use(json())
   app.disable('x-powered-by')
 
-  app.use('/server', createMenuRouter({ serverModel }))
+  app.use('/products', createProductRouter({ productModel }))
 
   const PORT = process.env.PORT ?? 1234
 
