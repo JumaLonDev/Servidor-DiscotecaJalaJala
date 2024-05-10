@@ -1,13 +1,15 @@
 import express, { json } from 'express'
 import { createProductRouter } from './routes/product.js'
+import { createCategoryRouter } from './routes/category.js'
 
-export const createApp = ({ productModel }) => {
+export const createApp = ({ productModel, categoryModel }) => {
   const app = express()
 
   app.use(json())
   app.disable('x-powered-by')
 
   app.use('/products', createProductRouter({ productModel }))
+  app.use('/categories', createCategoryRouter({ categoryModel }))
 
   const PORT = process.env.PORT ?? 1234
 
