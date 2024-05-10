@@ -1,7 +1,7 @@
 import { validateProduct, validatePartialProduct } from '../schemas/product.js'
 
 export class ProductController {
-  constructor({ productModel }) {
+  constructor ({ productModel }) {
     this.productModel = productModel
   }
 

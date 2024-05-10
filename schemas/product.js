@@ -9,13 +9,13 @@ const productSchema = z.object({
   productImage: z.string().url({
     message: 'Image must be a valid URL'
   }),
-  productCategory: z.string()
+  productState: z.boolean()
 })
 
-export function validateProduct(input) {
+export function validateProduct (input) {
   return productSchema.safeParse(input)
 }
 
-export function validatePartialProduct(input) {
+export function validatePartialProduct (input) {
   return productSchema.partial().safeParse(input)
 }
