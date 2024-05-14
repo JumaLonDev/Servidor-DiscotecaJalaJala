@@ -6,6 +6,7 @@ const productSchema = z.object({
     required_error: 'Product name is required.'
   }),
   productPrice: z.number().int(),
+  productCategoryId: z.number().int(),
   productImage: z.string().url({
     message: 'Image must be a valid URL'
   }),
