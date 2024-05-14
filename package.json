@@ -5,8 +5,8 @@
   "description": "This is the Jala Jala's Backend",
   "main": "app.js",
   "scripts": {
-    "start:local": "node --watch server-with-local.js",
-    "start:mysql":"node --watch server-with-mysql.js",
+    "start:local": "node --env-file .env node --watch server-with-local.js",
+    "start:mysql": "node --watch server-with-mysql.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/JumaLonDev/Servidor-DiscotecaJalaJala#readme",
   "dependencies": {
     "cors": "2.8.5",
+    "dotenv": "16.4.5",
     "express": "4.19.2",
     "mysql2": "3.9.2",
     "zod": "3.22.4"
