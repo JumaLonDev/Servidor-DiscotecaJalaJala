@@ -5,7 +5,7 @@
   "description": "This is the Jala Jala's Backend",
   "main": "app.js",
   "scripts": {
-    "start:local": "node --env-file .env node --watch server-with-local.js",
+    "start:local": "node --watch server-with-local.js",
     "start:mysql": "node --watch server-with-mysql.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
