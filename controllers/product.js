@@ -1,7 +1,7 @@
 import { validateProduct, validatePartialProduct } from '../schemas/product.js'
 
 export class ProductController {
-  constructor ({ productModel }) {
+  constructor({ productModel }) {
     this.productModel = productModel
   }
 
@@ -50,7 +50,10 @@ export class ProductController {
 
     const { id } = req.params
 
-    const updateProduct = await this.productModel.update({ id, input: result.data })
+    const updateProduct = await this.productModel.update({
+      id,
+      input: result.data
+    })
 
     return res.json(updateProduct)
   }

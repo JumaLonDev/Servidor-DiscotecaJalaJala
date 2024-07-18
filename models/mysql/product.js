@@ -1,27 +1,27 @@
-import mysql from "mysql2/promise";
-import { DEFAULT_CONFIG } from "../../config.js";
+import mysql from 'mysql2/promise'
+import { DEFAULT_CONFIG } from '../../config.js'
 
-const connectionString = process.env.DATABASE_URL ?? DEFAULT_CONFIG;
-const connection = await mysql.createConnection(connectionString);
+const connectionString = process.env.DATABASE_URL ?? DEFAULT_CONFIG
+const connection = await mysql.createConnection(connectionString)
 
 export class ProductModel {
   static async getAll() {
     const [products] = await connection.query(
-      "SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p INNER JOIN category c ON p.product_category_id = c.id ORDER BY product_name ASC;"
-    );
+      'SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p INNER JOIN category c ON p.product_category_id = c.id ORDER BY c.category_name ASC, p.product_name ASC;'
+    )
 
-    return products;
+    return products
   }
 
   static async getById({ id }) {
     const [products] = await connection.query(
-      "SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p JOIN category c ON p.product_category_id = c.id WHERE p.id = UUID_TO_BIN(?);",
+      'SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p JOIN category c ON p.product_category_id = c.id WHERE p.id = UUID_TO_BIN(?);',
       [id]
-    );
+    )
 
-    if (products.length === 0) return null;
+    if (products.length === 0) return null
 
-    return products[0];
+    return products[0]
   }
 
   static async create({ input }) {
@@ -30,11 +30,11 @@ export class ProductModel {
       productPrice,
       productCategoryId,
       productImage,
-      productState,
-    } = input;
+      productState
+    } = input
 
-    const [uuidResult] = await connection.query("SELECT UUID() uuid;");
-    const [{ uuid }] = uuidResult;
+    const [uuidResult] = await connection.query('SELECT UUID() uuid;')
+    const [{ uuid }] = uuidResult
 
     try {
       await connection.query(
@@ -44,31 +44,31 @@ export class ProductModel {
           productPrice,
           productCategoryId,
           productImage,
-          productState,
+          productState
         ]
-      );
+      )
     } catch (e) {
-      console.log(e);
-      throw new Error("Error creating product.");
+      console.log(e)
+      throw new Error('Error creating product.')
     }
 
     const [products] = await connection.query(
-      "SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p INNER JOIN category c ON p.product_category_id = c.id WHERE p.id = UUID_TO_BIN(?);",
+      'SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p INNER JOIN category c ON p.product_category_id = c.id WHERE p.id = UUID_TO_BIN(?);',
       [uuid]
-    );
+    )
 
-    return products[0];
+    return products[0]
   }
 
   static async delete({ id }) {
     const [products] = await connection.query(
-      "DELETE FROM product WHERE id = UUID_TO_BIN(?);",
+      'DELETE FROM product WHERE id = UUID_TO_BIN(?);',
       [id]
-    );
+    )
 
-    if (products.length === 0) return null;
+    if (products.length === 0) return null
 
-    return products[0];
+    return products[0]
   }
 
   static async update({ id, input }) {
@@ -77,22 +77,23 @@ export class ProductModel {
       productPrice,
       productCategoryId,
       productImage,
-      productState,
-    } = input;
+      productState
+    } = input
 
     // Prepare an object to hold update data
-    const updateData = {};
-    if (productName !== undefined) updateData.product_name = productName;
-    if (productPrice !== undefined) updateData.product_price = productPrice;
-    if (productCategoryId !== undefined)
-      updateData.product_category_id = productCategoryId;
-    if (productImage !== undefined) updateData.product_image = productImage;
-    if (productState !== undefined) updateData.product_state = productState;
+    const updateData = {}
+    if (productName !== undefined) updateData.product_name = productName
+    if (productPrice !== undefined) updateData.product_price = productPrice
+    if (productCategoryId !== undefined) {
+      updateData.product_category_id = productCategoryId
+    }
+    if (productImage !== undefined) updateData.product_image = productImage
+    if (productState !== undefined) updateData.product_state = productState
 
     // Construct the SET clause dynamically based on updateData
     const setClause = Object.keys(updateData)
       .map((key) => `${key} = ?`)
-      .join(", ");
+      .join(', ')
 
     try {
       await connection.query(
@@ -102,16 +103,16 @@ export class ProductModel {
         WHERE id = UUID_TO_BIN(?);
       `,
         [...Object.values(updateData), id]
-      );
+      )
     } catch (e) {
-      throw new Error("Error updating product.");
+      throw new Error('Error updating product.')
     }
 
     const [products] = await connection.query(
-      "SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p INNER JOIN category c ON p.product_category_id = c.id WHERE p.id = UUID_TO_BIN(?);",
+      'SELECT BIN_TO_UUID(p.id), p.product_name, p.product_price, c.category_name, p.product_image, p.product_state FROM product p INNER JOIN category c ON p.product_category_id = c.id WHERE p.id = UUID_TO_BIN(?);',
       [id]
-    );
+    )
 
-    return products[0];
+    return products[0]
   }
 }
